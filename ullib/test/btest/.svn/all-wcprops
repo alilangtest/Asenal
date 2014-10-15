@@ -1,0 +1,95 @@
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/libsrc/!svn/ver/19290/trunk/ullib/test/btest
+END
+test_write_failure.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/libsrc/!svn/ver/16851/trunk/ullib/test/btest/test_write_failure.cpp
+END
+test_ulnet_write.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/libsrc/!svn/ver/14958/trunk/ullib/test/btest/test_ulnet_write.cpp
+END
+test_ul_url.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/libsrc/!svn/ver/14958/trunk/ullib/test/btest/test_ul_url.cpp
+END
+test_comlog_guard.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/libsrc/!svn/ver/19290/trunk/ullib/test/btest/test_comlog_guard.cpp
+END
+test_ul_pack_server.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/libsrc/!svn/ver/11351/trunk/ullib/test/btest/test_ul_pack_server.cpp
+END
+test_comlog_level.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/libsrc/!svn/ver/13553/trunk/ullib/test/btest/test_comlog_level.cpp
+END
+test_ullog_level.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/libsrc/!svn/ver/13553/trunk/ullib/test/btest/test_ullog_level.cpp
+END
+test_ul_pack_client.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/libsrc/!svn/ver/11351/trunk/ullib/test/btest/test_ul_pack_client.cpp
+END
+test_ul_pack_serial.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/libsrc/!svn/ver/11351/trunk/ullib/test/btest/test_ul_pack_serial.cpp
+END
+test_comlog_hostname.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/libsrc/!svn/ver/11359/trunk/ullib/test/btest/test_comlog_hostname.cpp
+END
+COMAKE
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/libsrc/!svn/ver/19240/trunk/ullib/test/btest/COMAKE
+END
+test_ulnet_read.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/libsrc/!svn/ver/14958/trunk/ullib/test/btest/test_ulnet_read.cpp
+END
+test_com_openlog_r.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/libsrc/!svn/ver/14522/trunk/ullib/test/btest/test_com_openlog_r.cpp
+END
+test_comlog_disk.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/libsrc/!svn/ver/15628/trunk/ullib/test/btest/test_comlog_disk.cpp
+END
+Makefile
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/libsrc/!svn/ver/19240/trunk/ullib/test/btest/Makefile
+END

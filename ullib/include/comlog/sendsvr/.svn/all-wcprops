@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/libsrc/!svn/ver/1753/trunk/ullib/include/comlog/sendsvr
+END
+netappendersvr.h
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/libsrc/!svn/ver/1280/trunk/ullib/include/comlog/sendsvr/netappendersvr.h
+END
+loghead.h
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/libsrc/!svn/ver/1280/trunk/ullib/include/comlog/sendsvr/loghead.h
+END
+sendsvr.h
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/libsrc/!svn/ver/1753/trunk/ullib/include/comlog/sendsvr/sendsvr.h
+END
+checksvr.h
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/libsrc/!svn/ver/1280/trunk/ullib/include/comlog/sendsvr/checksvr.h
+END

@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 34
+/libsrc/!svn/ver/19290/trunk/ullib
+END
+ChangeLog
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/libsrc/!svn/ver/7313/trunk/ullib/ChangeLog
+END
+Makefile
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/libsrc/!svn/ver/11410/trunk/ullib/Makefile
+END
+README
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/libsrc/!svn/ver/1219/trunk/ullib/README
+END

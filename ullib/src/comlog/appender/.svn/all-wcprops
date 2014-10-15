@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/libsrc/!svn/ver/17634/trunk/ullib/src/comlog/appender
+END
+appender.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/libsrc/!svn/ver/16851/trunk/ullib/src/comlog/appender/appender.cpp
+END
+fileappender.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/libsrc/!svn/ver/16851/trunk/ullib/src/comlog/appender/fileappender.cpp
+END
+ttyappender.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/libsrc/!svn/ver/10279/trunk/ullib/src/comlog/appender/ttyappender.cpp
+END
+ullogappender.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/libsrc/!svn/ver/1753/trunk/ullib/src/comlog/appender/ullogappender.cpp
+END
+netappender.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/libsrc/!svn/ver/1753/trunk/ullib/src/comlog/appender/netappender.cpp
+END
+appenderfactory.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/libsrc/!svn/ver/17634/trunk/ullib/src/comlog/appender/appenderfactory.cpp
+END
+asyncfileappender.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/libsrc/!svn/ver/12882/trunk/ullib/src/comlog/appender/asyncfileappender.cpp
+END

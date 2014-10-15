@@ -1,0 +1,131 @@
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/libsrc/!svn/ver/19290/trunk/ullib/test
+END
+test2.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/libsrc/!svn/ver/7313/trunk/ullib/test/test2.cpp
+END
+test_ul_url.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/libsrc/!svn/ver/7887/trunk/ullib/test/test_ul_url.cpp
+END
+test_ul_url_dict.txt
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/libsrc/!svn/ver/7313/trunk/ullib/test/test_ul_url_dict.txt
+END
+test_pack_io_client.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/libsrc/!svn/ver/1340/trunk/ullib/test/test_pack_io_client.cpp
+END
+test3.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/libsrc/!svn/ver/7313/trunk/ullib/test/test3.cpp
+END
+test4.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/libsrc/!svn/ver/7313/trunk/ullib/test/test4.cpp
+END
+test5.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/libsrc/!svn/ver/7313/trunk/ullib/test/test5.cpp
+END
+test_ul_poll.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/libsrc/!svn/ver/5705/trunk/ullib/test/test_ul_poll.cpp
+END
+test_others.conf
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/libsrc/!svn/ver/1280/trunk/ullib/test/test_others.conf
+END
+test5.conf
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/libsrc/!svn/ver/1300/trunk/ullib/test/test5.conf
+END
+test_layout_leak.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/libsrc/!svn/ver/17634/trunk/ullib/test/test_layout_leak.cpp
+END
+test_layout_leak.conf
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/libsrc/!svn/ver/17634/trunk/ullib/test/test_layout_leak.conf
+END
+test_pack.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/libsrc/!svn/ver/11020/trunk/ullib/test/test_pack.cpp
+END
+test.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/libsrc/!svn/ver/7313/trunk/ullib/test/test.cpp
+END
+test_adapter.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/libsrc/!svn/ver/1313/trunk/ullib/test/test_adapter.cpp
+END
+test.conf
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/libsrc/!svn/ver/1280/trunk/ullib/test/test.conf
+END
+test_ul_conf.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/libsrc/!svn/ver/7607/trunk/ullib/test/test_ul_conf.cpp
+END
+test_ul_log_simple.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/libsrc/!svn/ver/7313/trunk/ullib/test/test_ul_log_simple.cpp
+END
+test_pack_io_server.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/libsrc/!svn/ver/1340/trunk/ullib/test/test_pack_io_server.cpp
+END
+test_ul_url_vhplink.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/libsrc/!svn/ver/8031/trunk/ullib/test/test_ul_url_vhplink.cpp
+END
+Makefile
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/libsrc/!svn/ver/17634/trunk/ullib/test/Makefile
+END

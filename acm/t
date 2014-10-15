@@ -1,0 +1,113 @@
+#include<iostream> 
+#include<cstdio> 
+#include<algorithm> 
+#include<cstring> 
+#include<string>
+#include<cmath> 
+#include<vector> 
+#include<queue> 
+#include<map>
+#include<ctime>
+#include<set>
+typedef __int64 lld; 
+using namespace std; 
+#define debug(x) cout<<#x<<"="<<x<<endl;
+#define here cout<<"_______________here "<<endl;
+#define clr(NAME,VALUE) memset(NAME,VALUE,sizeof(NAME)) 
+#define MAX 0x7f7f7f7f
+#define PI 3.14159265358979323 
+#define N 500010
+lld a[N];
+lld sum[N];
+lld dp[N];
+lld q[N];
+lld n,k;
+lld sto[N],st;
+inline int readT()
+{
+    char c;
+    lld ret;
+    while(c=getchar(),c<'0'||c>'9');
+    ret = c - '0';
+    while(c=getchar(),c>='0'&&c<='9')ret = ret * 10 + c-'0';
+    return ret;
+}
+inline lld cal(lld i,lld j)
+{
+    return dp[j]+(sum[i]-sum[j])-(i-j)*a[j+1];
+}
+inline lld G(lld k,lld j)
+{
+    return dp[k]-dp[j]-(sum[k]-sum[j])+(k*a[k+1]-j*a[j+1]);
+}
+inline lld S(lld k,lld j)
+{
+    return a[k+1]-a[j+1];
+}
+int main()
+{
+    #ifdef ADD_FREOPEN
+    freopen("a", "r", stdin);
+    #endif
+    lld T;
+    lld ans;
+    scanf("%I64d",&T);
+    while(T--)
+    {
+        scanf("%I64d%I64d",&n,&k);
+        sum[0]=0;
+        for(lld i=1;i<=n;i++)
+        {
+            a[i]=readT();
+//          scanf("%I64d",&a[i]);
+            sum[i]=sum[i-1]+a[i];
+        }
+        clr(dp,0);
+        lld front=0,rear=0;
+        
+        dp[k]=cal(k,0);
+        q[rear++]=0;
+        st=0;
+        lld now=0;
+        for(lld i=k;i<=n;i++)
+        {
+            while(rear>front+1)
+            {
+                if(G(q[front+1],q[front])<=i*S(q[front+1],q[front]))
+                {
+                    front++;
+                }
+                else
+                break;
+            }
+            dp[i]=cal(i,q[front]);
+            if(i-k>=k-1)
+            {
+//              debug(i);
+//              debug(sto[now]);
+                while(rear>front+1)
+                {
+                    if(!(G(q[rear-1],q[rear-2])*S(sto[now],q[rear-1])<G(sto[now],q[rear-1])*S(q[rear-1],q[rear-2])))
+                    {
+                        rear--;
+                    }
+                    else
+                    break;
+                }
+                q[rear++]=sto[now];
+                now++;
+            }
+            sto[st++]=i;
+        }
+//      for(lld i=1;i<=n;i++)
+//      {
+//          cout<<dp[i]<<" ";
+//      }
+//      cout<<endl;
+        printf("%I64d\n",dp[n]);
+    }
+    #ifndef ONLINE_JUDGE
+    while(1);
+    #endif
+    return 0;
+}

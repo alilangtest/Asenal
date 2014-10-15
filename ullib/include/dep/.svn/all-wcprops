@@ -1,0 +1,59 @@
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/libsrc/!svn/ver/13944/trunk/ullib/include/dep
+END
+dep_log.h
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/libsrc/!svn/ver/6537/trunk/ullib/include/dep/dep_log.h
+END
+dep_conf.h
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/libsrc/!svn/ver/1219/trunk/ullib/include/dep/dep_conf.h
+END
+dep_net.h
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/libsrc/!svn/ver/1219/trunk/ullib/include/dep/dep_net.h
+END
+dep_exlink.h
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/libsrc/!svn/ver/13944/trunk/ullib/include/dep/dep_exlink.h
+END
+dep_udpdns.h
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/libsrc/!svn/ver/1219/trunk/ullib/include/dep/dep_udpdns.h
+END
+dep_pack.h
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/libsrc/!svn/ver/1219/trunk/ullib/include/dep/dep_pack.h
+END
+dep_file.h
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/libsrc/!svn/ver/1219/trunk/ullib/include/dep/dep_file.h
+END
+dep_http.h
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/libsrc/!svn/ver/1219/trunk/ullib/include/dep/dep_http.h
+END
+dep_htmltag.h
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/libsrc/!svn/ver/1219/trunk/ullib/include/dep/dep_htmltag.h
+END
