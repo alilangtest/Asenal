@@ -1,6 +1,6 @@
 CXX = g++
-FLAGS = -Wall -W -DDEBUG -g 
-OBJECT = h1.cpp
+FLAGS = -Wall -W -DDEBUG -g -O0
+OBJECT = numTrees.cc
 
 main: $(OBJECT)
 	$(CXX) $(FLAGS) $(OBJECT)

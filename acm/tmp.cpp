@@ -18,7 +18,8 @@ using namespace std;
 #endif
 #define here cout<<__LINE__<< "  " << "_______________here" <<endl;
 #define clr(NAME,VALUE) memset(NAME,VALUE,sizeof(NAME)) 
-#define MAX 0x7f7f7f7f 
+#define MAX 0x7fffffff 
+#define MIN 0x80000000
 #define N 16000010
 #define PRIME 999983
 
