@@ -1,3 +1,13 @@
+<<<<<<< HEAD
+#include <stdio.h>
+#include <stdlib.h>
+
+#include <editline/readline.h>
+#include <editline/history.h>
+
+int main()
+{
+=======
 #include "mpc.h"
 
 #ifdef _WIN32
@@ -362,5 +372,6 @@ int main(int argc, char** argv) {
 
     mpc_cleanup(6, Number, Symbol, Sexpr, Qexpr, Expr, Lispy);
 
+>>>>>>> 5caf8eb032d4451e7ddd1738e03a02d9592e5738
     return 0;
 }

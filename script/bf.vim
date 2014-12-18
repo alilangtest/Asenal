@@ -5,7 +5,7 @@
 "规范else if和elseif格式
 :%s/^\(\s*\)}\_s*\(else\_s*if\)\s*(\(.*\))\_s*{/\1} \2 (\3) {/g
 "规范函数和类声明的大括号
-:%s/^\(\s*\)\(function\|private\|protected\|public\|void\|inline\|int\|Status\)\(.*\)\_s*{\n*\r*/\1\2\3\r\1{\r/g
+:%s/^\(\s*\)\(function\|private\|protected\|public\|class\|interface\)\(.*\)\_s*{\n*\r*/\1\2\3\r\1{\r/g
 "转换单行注释/* */为//格式
 :%s/\(\s*\)\/\*\{1,\}\s*\(.*\)\s*\*\{1,\}\/$/\1\/\/ \2/g
 "去除包含空字符的空行
