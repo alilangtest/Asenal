@@ -21,11 +21,9 @@ int setnonblocking(int sockfd)
 }
 
 
-void str_echo(int fd)
+void str_echo(int& fd)
 {
     char buf[10240];
-    rio_t rio;
-    rio_readinitb(&rio, fd);
 
     ssize_t nread;
     while (1) {
@@ -40,7 +38,9 @@ void str_echo(int fd)
                 printf("errno other\n");
                 return ;
             }
-        } else if (nread == 0){
+        } else if (nread == 0) {
+            printf("nread equal 0\n");
+            close(fd); // close the fd to make it remove from the set of epoll
             return ;
         } else {
             break;
@@ -74,7 +74,13 @@ int main()
     
     for (;;) {
         nfds = epoll_wait(kdfpd, events, 100, 1000);
+        if (nfds == -1) {
+            perror("epoll_wait error");
+            return -1;
+        }
+        // printf("nfds %d\n", nfds);
         for (int i = 0; i < nfds; i++) {
+            // printf("fd %d %d\n", events[i].data.fd, events[i].events);
             if (events[i].data.fd == listenfd) {
                 connfd = accept(listenfd, (struct sockaddr *) &cliaddr, &clilen);
                 log_info("the accept fd is %d\n", connfd);
@@ -83,7 +89,36 @@ int main()
                 ev.data.fd = connfd;
                 epoll_ctl(kdfpd, EPOLL_CTL_ADD, connfd, &ev);
             } else {
-                str_echo(events[i].data.fd);
+                if (events[i].events & (EPOLLRDHUP | EPOLLERR | EPOLLHUP)) {
+                    printf("timeup event\n");
+                } else if (events[i].events & EPOLLIN) {
+                    int fd = events[i].data.fd;
+                    char buf[10240];
+
+                    ssize_t nread;
+                    while (1) {
+                        nread = read(fd, buf, MAXLINE);
+                        printf("read size %d\n", nread);
+                        // printf("read buf %s\n", buf);
+                        if (nread == -1) {
+                            if ((errno == EINTR)) {
+                                printf("errno EINTR\n");
+                                continue;
+                            } else {
+                                printf("errno other\n");
+                                break;
+                            }
+                        } else if (nread == 0) {
+                            printf("nread equal 0\n");
+                            close(fd); // close the fd to make it remove from the set of epoll
+                            break;
+                        } else {
+                            break;
+                        }
+                    }
+                    break;
+                    // str_echo((int)(events[i].data.fd));
+                }
             }
         }
     }
