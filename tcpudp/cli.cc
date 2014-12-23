@@ -23,7 +23,7 @@ uint64_t NowMicros() {
 void str_cli(int sockfd)
 {
     int     n;
-    int cnt = 10000;
+    int cnt = 1000;
     int len = 1000;
     char **strs = (char **)malloc(sizeof(char *) * cnt);
     for (int i = 0; i < cnt; i++) {
@@ -41,6 +41,7 @@ void str_cli(int sockfd)
         int32_t nwritten = 0;
         nwritten = rio_writen(sockfd, strs[i], strlen(strs[i]));
         printf("nwritten %d\n", nwritten);
+        usleep(2000000);
     }
     ed = NowMicros();
     printf("cost time %lld", ed - st);

@@ -22,7 +22,7 @@ void dg_cli(FILE *fp, int sockfd, const SA *pservaddr, socklen_t servlen)
 {
     int     n;
     int cnt = 100000;
-    int len = 100;
+    int len = 1000;
     char **strs = (char **)malloc(sizeof(char *) * cnt);
     for (int i = 0; i < cnt; i++) {
         strs[i] = (char *)malloc(sizeof(char) * len + 1);
@@ -35,11 +35,16 @@ void dg_cli(FILE *fp, int sockfd, const SA *pservaddr, socklen_t servlen)
     }
     uint64_t st, ed;
     st = NowMicros();
+    int totn = 0;
+    int nwrite;
+    
     for (int i = 0; i < cnt; i++) {
-        sendto(sockfd, strs[i], strlen(strs[i]), 0, pservaddr, servlen);
+        nwrite = sendto(sockfd, strs[i], strlen(strs[i]), 0, pservaddr, servlen);
+        totn += nwrite;
     }
     ed = NowMicros();
-    printf("cost time %lld", ed - st);
+    printf("cost time %lld\n", ed - st);
+    printf("totn %d", totn);
 }
 
 int main(int argc, char **argv)

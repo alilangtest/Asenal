@@ -71,6 +71,7 @@ int main()
     ev.data.fd = listenfd;
     int s = epoll_ctl(kdfpd, EPOLL_CTL_ADD, listenfd, &ev);
     int nfds;
+    int tot = 0;
     
     for (;;) {
         nfds = epoll_wait(kdfpd, events, 100, 1000);
@@ -99,6 +100,8 @@ int main()
                     while (1) {
                         nread = read(fd, buf, MAXLINE);
                         printf("read size %d\n", nread);
+                        tot += nread;
+                        printf("tot size %d\n", tot);
                         // printf("read buf %s\n", buf);
                         if (nread == -1) {
                             if ((errno == EINTR)) {

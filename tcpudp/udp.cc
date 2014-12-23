@@ -49,6 +49,7 @@ int main()
     socklen_t clilen = sizeof(cliaddr);
     int cnt = 0;
     char buf[10240];
+    int tot = 0;
     for (;;) {
         nfds = epoll_wait(kdfpd, events, 100, 10000);
         // printf("nfds %d\n", nfds);
@@ -56,11 +57,11 @@ int main()
 
             int fd = events[i].data.fd;
             if (events[i].events & EPOLLIN) {
-                ssize_t nread;
+                ssize_t nread = 1;
                 while (1) {
                     nread = read(fd, buf, MAXLINE);
                     printf("%d\n", nread);
-                    // printf("read buf %s\n", buf);
+
                     if (nread == -1) {
                         if ((errno == EINTR)) {
                             printf("errno EINTR\n");
@@ -70,8 +71,11 @@ int main()
                             break;
                         }
                     } else if (nread == 0){
+                        close(fd);
                         break;
                     } else {
+                        tot += nread;
+                        printf("tot %d\n", tot);
                         break;
                     }
                 }
