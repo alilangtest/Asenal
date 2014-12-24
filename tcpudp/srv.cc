@@ -114,6 +114,9 @@ int main()
                         } else if (nread == 0) {
                             printf("nread equal 0\n");
                             close(fd); // close the fd to make it remove from the set of epoll
+                                       // TODO: if don't close this fd, epoll will still cycle the fd
+                                       // check why epoll return EPOLLIN but we
+                                       // can't read anydata
                             break;
                         } else {
                             break;

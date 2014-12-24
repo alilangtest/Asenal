@@ -1,6 +1,6 @@
 CXX = g++
 FLAGS = -Wall -W -DDEBUG -g -O0
-OBJECT = numTrees.cc
+OBJECT = maxPathSum.cc
 
 main: $(OBJECT)
 	$(CXX) $(FLAGS) $(OBJECT)
