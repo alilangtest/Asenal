@@ -21,7 +21,7 @@ uint64_t NowMicros() {
 void dg_cli(FILE *fp, int sockfd, const SA *pservaddr, socklen_t servlen)
 {
     int     n;
-    int cnt = 100000;
+    int cnt = 100;
     int len = 1000;
     char **strs = (char **)malloc(sizeof(char *) * cnt);
     for (int i = 0; i < cnt; i++) {
