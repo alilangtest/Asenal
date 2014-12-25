@@ -1,4 +1,4 @@
-CXXFLAGS= -g
+CXXFLAGS= -g -D__XDEBUG__
 .PHONY: all clean
 
 
