@@ -1,0 +1,30 @@
+#ifndef __TICK_EPOLL_H__
+#define __TICK_EPOLL_H__
+#include "sys/epoll.h"
+#include "status.h"
+
+typedef struct TickFiredEvent {
+    int fd_;
+    int mask_;
+}TickFiredEvent;
+
+class TickEpoll
+{
+
+public:
+    TickEpoll();
+    ~TickEpoll();
+    Status TickAddEvent(int fd, int mask);
+
+    int TickPoll(struct timeval *tvp);
+
+    TickFiredEvent *firedevent() { return firedevent_; }
+
+private:
+
+    int epfd_;
+    struct epoll_event *events_;
+    TickFiredEvent *firedevent_;
+};
+
+#endif
