@@ -47,9 +47,5 @@ private:
 
 };
 
-class tickConf
-{
-    int thread_num;
-};
 
 #endif

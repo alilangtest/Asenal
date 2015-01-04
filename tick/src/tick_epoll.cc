@@ -5,13 +5,12 @@
 
 TickEpoll::TickEpoll()
 {
+    epfd_ = epoll_create(1024); 
     events_ = (struct epoll_event *)malloc(sizeof(struct epoll_event) * TICK_MAX_CLIENTS);
-
     if (!events_) {
         log_err("init epoll_event error");
     }
-
-    epfd_ = epoll_create(1024); 
+    timeout_ = 1000;
 
     firedevent_ = (TickFiredEvent *)malloc(sizeof(TickFiredEvent) * TICK_MAX_CLIENTS);
 }
@@ -31,11 +30,10 @@ Status TickEpoll::TickAddEvent(int fd, int mask)
     return Status::OK();
 }
 
-int TickEpoll::TickPoll(struct timeval *tvp)
+int TickEpoll::TickPoll()
 {
-
     int retval, numevents = 0;
-    retval = epoll_wait(epfd_, events_, TICK_MAX_CLIENTS, 1000);
+    retval = epoll_wait(epfd_, events_, TICK_MAX_CLIENTS, timeout_);
     if (retval > 0) {
         numevents = retval;
         for (int i = 0; i < numevents; i++) {

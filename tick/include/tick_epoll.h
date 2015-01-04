@@ -16,7 +16,7 @@ public:
     ~TickEpoll();
     Status TickAddEvent(int fd, int mask);
 
-    int TickPoll(struct timeval *tvp);
+    int TickPoll();
 
     TickFiredEvent *firedevent() { return firedevent_; }
 
@@ -24,6 +24,7 @@ private:
 
     int epfd_;
     struct epoll_event *events_;
+    int timeout_;
     TickFiredEvent *firedevent_;
 };
 
