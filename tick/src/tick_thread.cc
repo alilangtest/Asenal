@@ -41,8 +41,6 @@ TickThread::TickThread()
     producer_->setSendTimeout(5);
     producer_->setRecvTimeout(2);
     producer_->setConnMax(4);
-    SendMessage("czz_haha");
-
 }
 
 TickThread::~TickThread()
@@ -82,6 +80,11 @@ void TickThread::RunProcess()
                 conn_queue_.pop();
                 }
                 SendMessage(ti->msg());
+                /*
+                 * After consume the item, you need delete it
+                 */
+                delete(ti);
+                LOG(WARNING) << "Sent one message to QBus";
             }
         }
     }

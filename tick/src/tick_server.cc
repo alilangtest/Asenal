@@ -72,6 +72,7 @@ TickServer::~TickServer()
     for (int i = 0; i < TICK_THREAD_NUM; i++) {
         delete(tickThread_[i]);
     }
+    free(rbuf_);
     delete(tickEpoll_);
     close(sockfd_);
 }
@@ -88,13 +89,15 @@ Status TickServer::TickReadHeader(rio_t *rio)
     char buf[1024];
     int32_t integer = 0;
     ssize_t nread;
+    header_len_ = 0;
     while (1) {
         nread = rio_readnb(rio, buf, COMMAND_HEADER_LENGTH);
+        // log_info("nread %d", nread);
         if (nread == -1) {
             if ((errno == EAGAIN && !(flags_ & O_NONBLOCK)) || (errno == EINTR)) {
                 continue;
             } else {
-                s = Status::IOError("read command header error");
+                s = Status::IOError("Read command header error");
                 return s;
             }
         } else if (nread == 0){
@@ -105,7 +108,6 @@ Status TickServer::TickReadHeader(rio_t *rio)
     }
     memcpy((char *)(&integer), buf, sizeof(int32_t));
     header_len_ = ntohl(integer);
-    // log_info("header_len %d", header_len_);
     return Status::OK();
 }
 
@@ -116,13 +118,14 @@ Status TickServer::TickReadCode(rio_t *rio)
     char buf[1024];
     int32_t integer = 0;
     ssize_t nread = 0;
+    r_opcode_ = 0;
     while (1) {
         nread = rio_readnb(rio, buf, COMMAND_CODE_LENGTH);
         if (nread == -1) {
             if ((errno == EAGAIN && !(flags_ & O_NONBLOCK)) || (errno == EINTR)) {
                 continue;
             } else {
-                s = Status::IOError("read command code error");
+                s = Status::IOError("Read command code error");
                 return s;
             }
         } else if (nread == 0){
@@ -133,7 +136,6 @@ Status TickServer::TickReadCode(rio_t *rio)
     }
     memcpy((char *)(&integer), buf, sizeof(int32_t));
     r_opcode_ = ntohl(integer);
-    // log_info("r_opcode %d", r_opcode_);
     return Status::OK();
 }
 
@@ -141,13 +143,16 @@ Status TickServer::TickReadPacket(rio_t *rio)
 {
     Status s;
     int nread = 0;
+    if (header_len_ < 4) {
+        return Status::Corruption("The packet no integrity");
+    }
     while (1) {
         nread = rio_readnb(rio, (void*)rbuf_, header_len_ - 4);
         if (nread == -1) {
             if ((errno == EAGAIN && !(flags_ & O_NONBLOCK)) || (errno == EINTR)) {
                 continue;
             } else {
-                s = Status::IOError("read data error");
+                s = Status::IOError("Read data error");
                 return s;
             }
         } else if (nread == 0) {
@@ -169,16 +174,17 @@ void TickServer::RunProcess()
         nfds = tickEpoll_->TickPoll();
         tfe = tickEpoll_->firedevent();
         for (int i = 0; i < nfds; i++) {
-            // log_info("TickThread get fd %d", fd);
             if (tfe->mask_ & EPOLLIN) {
                 rio_t rio;
                 rio_readinitb(&rio, sockfd_);
                 s = TickReadHeader(&rio);
                 if (!s.ok()) {
+                    LOG(ERROR) << s.ToString();
                     continue;
                 }
                 s = TickReadCode(&rio);
                 if (!s.ok()) {
+                    LOG(ERROR) << s.ToString();
                     continue;
                 }
                 s = TickReadPacket(&rio);
@@ -192,6 +198,8 @@ void TickServer::RunProcess()
                     write(tickThread_[last_thread_]->notify_send_fd(), "", 1);
                     last_thread_++;
                     last_thread_ %= TICK_THREAD_NUM;
+                } else {
+                    LOG(ERROR) << s.ToString();
                 }
             }
         }

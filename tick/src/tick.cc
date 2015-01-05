@@ -15,8 +15,9 @@ TickServer *g_tickServer;
 static void tick_glog_init()
 {
     FLAGS_log_dir = g_tickConf->log_path();
-    google::InitGoogleLogging("tick");
-    LOG(INFO) << "tick glog init ok";
+    ::google::InitGoogleLogging("tick");
+    FLAGS_minloglevel = g_tickConf->log_level();
+    LOG(WARNING) << "Tick glog init";
     /*
      * dump some usefull message when crash on certain signals
      */
@@ -32,19 +33,30 @@ void tick_signal_setup()
 {
     signal(SIGHUP, SIG_IGN);
     signal(SIGPIPE, SIG_IGN);
-    LOG(INFO) << "tick signal setup ok";
+    LOG(WARNING) << "tick signal setup ok";
 }
 
+
+static void version()
+{
+    printf("-----------Tick server 1.0.0----------\n");
+}
 void tick_init_conf(const char* path)
 {
     g_tickConf = new TickConf(path);
     if (g_tickConf == NULL) {
         LOG(FATAL) << "tick load conf error";
     }
+
+    version();
+    printf("-----------Tick config list----------\n");
     g_tickConf->DumpConf();
+    printf("-----------Tick config end----------\n");
 }
 
-static void usage() {
+
+static void usage()
+{
     fprintf(stderr,
             "Tick module 1.0.0\n"
             "need One parameters\n"
@@ -106,11 +118,13 @@ int main(int argc, char **argv)
     g_tickServer = new TickServer();
     
     if (g_tickServer != NULL) {
-        LOG(INFO) << "Tick Server init ok";
+        LOG(WARNING) << "Tick Server init ok";
+    } else {
+        LOG(FATAL) << "Tick Server init error";
     }
 
 
-    LOG(INFO) << "Tick Server going to start";
+    LOG(WARNING) << "Tick Server going to start";
     g_tickServer->RunProcess();
 
     return 0;

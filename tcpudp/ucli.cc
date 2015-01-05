@@ -82,7 +82,7 @@ void send_pb(FILE *fp, int sockfd, const SA *pservaddr, socklen_t servlen)
     char w[100];
     BuildObuf(w, 1, sizeof(obuf));
     memcpy(w + 4 + 4, obuf, sizeof(obuf));
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 1000000; i++) {
         sendto(sockfd, w, 4 + 4 + sizeof(obuf), 0, pservaddr, servlen);
     }
 
@@ -101,7 +101,7 @@ int main(int argc, char **argv)
 
     bzero(&servaddr, sizeof(servaddr));
     servaddr.sin_family = AF_INET;
-    servaddr.sin_port = htons(9877);
+    servaddr.sin_port = htons(9221);
     inet_pton(AF_INET, argv[1], &servaddr.sin_addr);
 
     sockfd = socket(AF_INET, SOCK_DGRAM, 0);

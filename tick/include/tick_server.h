@@ -35,6 +35,9 @@ public:
 private:
 
     Status SetBlockType(BlockType type);
+    /*
+     * These functions parse the message from client
+     */
     Status TickReadHeader(rio_t *rio);
     Status TickReadCode(rio_t *rio);
     Status TickReadPacket(rio_t *rio);
