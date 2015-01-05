@@ -18,7 +18,8 @@ LIB_PATH = -L./ \
 
 
 LIBS = -lpthread \
-	   -lqbusclient
+	   -lqbusclient \
+	   -lprotobuf
 
 DYNAMIC_LIBS = -lglog
 

@@ -117,6 +117,6 @@ bool BaseConf::getConfStr(const char* name, char* value)
 void BaseConf::DumpConf()
 {
     for (int i = 0; i < num_; i++) {
-        printf("line %d %s %s\n", i + 1, item_[i].name, item_[i].value);
+        printf("%2d %s %s\n", i + 1, item_[i].name, item_[i].value);
     }
 }

@@ -6,8 +6,31 @@
 #include "tick_thread.h"
 #include "tick_conf.h"
 #include "mutexlock.h"
+#include <glog/logging.h>
+#include "status.h"
 
 extern TickConf *g_tickConf;
+
+Status TickServer::SetBlockType(BlockType type)
+{
+    Status s;
+    if ((flags_ = fcntl(sockfd_, F_GETFL, 0)) < 0) {
+        s = Status::Corruption("F_GETFEL error");
+        close(sockfd_);
+        return s;
+    }
+    if (type == kBlock) {
+        flags_ &= (~O_NONBLOCK);
+    } else if (type == kNonBlock) {
+        flags_ |= O_NONBLOCK;
+    }
+    if (fcntl(sockfd_, F_SETFL, flags_) < 0) {
+        s = Status::Corruption("F_SETFL error");
+        close(sockfd_);
+        return s;
+    }
+    return Status::OK();
+}
 
 TickServer::TickServer()
 {
@@ -22,16 +45,26 @@ TickServer::TickServer()
     servaddr_.sin_port = htons(port_);
 
     bind(sockfd_, (struct sockaddr *) &servaddr_, sizeof(servaddr_));
-    setnonblocking(sockfd_);
+
+    SetBlockType(kNonBlock);
 
     // init tick epoll
     tickEpoll_ = new TickEpoll();
     tickEpoll_->TickAddEvent(sockfd_, EPOLLIN | EPOLLERR | EPOLLHUP);
 
+    // init the rbuf
+    rbuf_ = (char *)malloc(sizeof(char) * TICK_MAX_MESSAGE);
+
     last_thread_ = 0;
     for (int i = 0; i < TICK_THREAD_NUM; i++) {
         tickThread_[i] = new TickThread();
     }
+
+    // start the tickThread_ thread
+    for (int i = 0; i < TICK_THREAD_NUM; i++) {
+        pthread_create(&(tickThread_[i]->thread_id_), NULL, &(TickServer::StartThread), tickThread_[i]);
+    }
+
 }
 
 TickServer::~TickServer()
@@ -49,32 +82,118 @@ void* TickServer::StartThread(void* arg)
     return NULL;
 }
 
+Status TickServer::TickReadHeader(rio_t *rio)
+{
+    Status s;
+    char buf[1024];
+    int32_t integer = 0;
+    ssize_t nread;
+    while (1) {
+        nread = rio_readnb(rio, buf, COMMAND_HEADER_LENGTH);
+        if (nread == -1) {
+            if ((errno == EAGAIN && !(flags_ & O_NONBLOCK)) || (errno == EINTR)) {
+                continue;
+            } else {
+                s = Status::IOError("read command header error");
+                return s;
+            }
+        } else if (nread == 0){
+            return Status::Corruption("Connect has interrupt");
+        } else {
+            break;
+        }
+    }
+    memcpy((char *)(&integer), buf, sizeof(int32_t));
+    header_len_ = ntohl(integer);
+    // log_info("header_len %d", header_len_);
+    return Status::OK();
+}
+
+
+Status TickServer::TickReadCode(rio_t *rio)
+{
+    Status s;
+    char buf[1024];
+    int32_t integer = 0;
+    ssize_t nread = 0;
+    while (1) {
+        nread = rio_readnb(rio, buf, COMMAND_CODE_LENGTH);
+        if (nread == -1) {
+            if ((errno == EAGAIN && !(flags_ & O_NONBLOCK)) || (errno == EINTR)) {
+                continue;
+            } else {
+                s = Status::IOError("read command code error");
+                return s;
+            }
+        } else if (nread == 0){
+            return Status::Corruption("Connect has interrupt");
+        } else {
+            break;
+        }
+    }
+    memcpy((char *)(&integer), buf, sizeof(int32_t));
+    r_opcode_ = ntohl(integer);
+    // log_info("r_opcode %d", r_opcode_);
+    return Status::OK();
+}
+
+Status TickServer::TickReadPacket(rio_t *rio)
+{
+    Status s;
+    int nread = 0;
+    while (1) {
+        nread = rio_readnb(rio, (void*)rbuf_, header_len_ - 4);
+        if (nread == -1) {
+            if ((errno == EAGAIN && !(flags_ & O_NONBLOCK)) || (errno == EINTR)) {
+                continue;
+            } else {
+                s = Status::IOError("read data error");
+                return s;
+            }
+        } else if (nread == 0) {
+            return Status::Corruption("Connect has interrupt");
+        } else {
+            break;
+        }
+    }
+    rbuf_len_ = nread;
+    return Status::OK();
+}
+
 void TickServer::RunProcess()
 {
-    // start the tickThread_ thread
-    for (int i = 0; i < TICK_THREAD_NUM; i++) {
-        pthread_create(&(tickThread_[i]->thread_id_), NULL, &(TickServer::StartThread), tickThread_[i]);
-    }
     int nfds;
     TickFiredEvent *tfe;
+    Status s;
     for (;;) {
         nfds = tickEpoll_->TickPoll();
         tfe = tickEpoll_->firedevent();
-        // log_info("TickServer get nfds %d\n", nfds);
         for (int i = 0; i < nfds; i++) {
-             int fd = tfe->fd_;
-             if (tfe->mask_ & EPOLLIN) {
-                 std::queue<TickItem> *q = &(tickThread_[last_thread_]->conn_queue_);
-                 TickItem ti(fd);
-                 log_info("TickItem %d\n", last_thread_);
-                 {
-                 MutexLock l(&tickThread_[last_thread_]->mutex_);
-                 q->push(ti);
-                 }
-                 write(tickThread_[last_thread_]->notify_send_fd(), "", 1);
-                 last_thread_++;
-                 last_thread_ %= TICK_THREAD_NUM;
-             }
+            // log_info("TickThread get fd %d", fd);
+            if (tfe->mask_ & EPOLLIN) {
+                rio_t rio;
+                rio_readinitb(&rio, sockfd_);
+                s = TickReadHeader(&rio);
+                if (!s.ok()) {
+                    continue;
+                }
+                s = TickReadCode(&rio);
+                if (!s.ok()) {
+                    continue;
+                }
+                s = TickReadPacket(&rio);
+                if (s.ok()) {
+                    std::queue<TickItem *> *q = &(tickThread_[last_thread_]->conn_queue_);
+                    TickItem *ti = new TickItem(rbuf_, rbuf_len_);
+                    {
+                    MutexLock l(&tickThread_[last_thread_]->mutex_);
+                    q->push(ti);
+                    }
+                    write(tickThread_[last_thread_]->notify_send_fd(), "", 1);
+                    last_thread_++;
+                    last_thread_ %= TICK_THREAD_NUM;
+                }
+            }
         }
     }
 }

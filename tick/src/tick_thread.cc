@@ -7,6 +7,7 @@
 #include "tick_item.h"
 #include "tick_conf.h"
 #include <glog/logging.h>
+#include "status.h"
 
 extern TickConf* g_tickConf;
 
@@ -40,11 +41,8 @@ TickThread::TickThread()
     producer_->setSendTimeout(5);
     producer_->setRecvTimeout(2);
     producer_->setConnMax(4);
+    SendMessage("czz_haha");
 
-    std::string errstr("");
-    std::vector<std::string> msg(1, "czz_heiheiho");
-    bool ret = producer_->send(msg, qbus_topic_, errstr, KafkaConstDef::MESSAGE_RANDOM_SEND);
-    log_info("%d", ret);
 }
 
 TickThread::~TickThread()
@@ -56,50 +54,34 @@ TickThread::~TickThread()
     close(notify_receive_fd_);
 }
 
+bool TickThread::SendMessage(const char *msg)
+{
+    std::vector<std::string> msgs(1, msg);
+    std::string errstr("");
+    bool ret = producer_->send(msgs, qbus_topic_, errstr, KafkaConstDef::MESSAGE_RANDOM_SEND);
+    return ret;
+}
+
+
 void TickThread::RunProcess()
 {
     thread_id_ = pthread_self();
     int nfds;
-    TickFiredEvent *tfe;
-    char buf[1024];
-    int tot = 0;
+    TickFiredEvent *tfe = NULL;
     char bb[1];
-    TickItem ti;
+    TickItem *ti;
     for (;;) {
         nfds = tickEpoll_->TickPoll();
         tfe = tickEpoll_->firedevent();
         for (int i = 0; i < nfds; i++) {
-            read(notify_receive_fd_, bb, 1);
-            {
-            MutexLock l(&mutex_);
-            ti = conn_queue_.front();
-            conn_queue_.pop();
-            }
-
-            int fd = ti.fd();
-            // log_info("TickThread get fd %d", fd);
             if (tfe->mask_ & EPOLLIN) {
-                ssize_t nread = 1;
-                while (1) {
-                    nread = read(fd, buf, MAXLINE);
-
-                    if (nread == -1) {
-                        if ((errno == EINTR)) {
-                            continue;
-                        } else {
-                            break;
-                        }
-                    } else if (nread == 0){
-                        close(fd);
-                        break;
-                    } else {
-                        tot += nread;
-                        // log_info("tot %lld %d", thread_id_, tot);
-                        break;
-                    }
+                read(notify_receive_fd_, bb, 1);
+                {
+                MutexLock l(&mutex_);
+                ti = conn_queue_.front();
+                conn_queue_.pop();
                 }
-            } else {
-                log_info("error come");
+                SendMessage(ti->msg());
             }
         }
     }

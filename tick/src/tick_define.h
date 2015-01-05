@@ -3,7 +3,21 @@
 
 #define TICK_MAX_CLIENTS 10240
 #define TICK_MAX_MESSAGE 10240
-#define TICK_THREAD_NUM 15
+#define TICK_THREAD_NUM 16
+
+/*
+ * The pb head and code length
+ */
+#define COMMAND_HEADER_LENGTH 4
+#define COMMAND_CODE_LENGTH 4
+
+/*
+ * The socket block type
+ */
+enum BlockType {
+    kBlock = 0,
+    kNonBlock = 1,
+};
 
 enum EventStatus{
     kNone = 0,

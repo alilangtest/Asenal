@@ -14,14 +14,13 @@ TickServer *g_tickServer;
 
 static void tick_glog_init()
 {
-    log_info("%s", g_tickConf->log_path());
     FLAGS_log_dir = g_tickConf->log_path();
     google::InitGoogleLogging("tick");
     LOG(INFO) << "tick glog init ok";
     /*
      * dump some usefull message when crash on certain signals
      */
-    google::InstallFailureSignalHandler();
+    // google::InstallFailureSignalHandler();
 }
 
 static void sig_handler(const int sig)
@@ -51,7 +50,7 @@ static void usage() {
             "need One parameters\n"
             "-D the conf path \n"
             "-h show this usage message \n"
-            "example: ./tick -D./conf/tick.conf\n"
+            "example: ./bin/tick -D./conf/tick.conf\n"
            );
 }
 
