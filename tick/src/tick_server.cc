@@ -147,7 +147,7 @@ Status TickServer::TickReadPacket(rio_t *rio)
         return Status::Corruption("The packet no integrity");
     }
     while (1) {
-        nread = rio_readnb(rio, (void*)rbuf_, header_len_ - 4);
+        nread = rio_readnb(rio, (void *)(rbuf_ + COMMAND_HEADER_LENGTH + COMMAND_CODE_LENGTH), header_len_ - 4);
         if (nread == -1) {
             if ((errno == EAGAIN && !(flags_ & O_NONBLOCK)) || (errno == EINTR)) {
                 continue;
@@ -162,6 +162,19 @@ Status TickServer::TickReadPacket(rio_t *rio)
         }
     }
     rbuf_len_ = nread;
+    return Status::OK();
+}
+
+Status TickServer::BuildObuf()
+{
+    uint32_t code_len = COMMAND_CODE_LENGTH + rbuf_len_;
+    uint32_t u;
+
+    u = htonl(code_len);
+    memcpy(rbuf_, &u, sizeof(uint32_t));
+    u = htonl(r_opcode_);
+    memcpy(rbuf_ + COMMAND_CODE_LENGTH, &u, sizeof(uint32_t));
+
     return Status::OK();
 }
 
@@ -190,7 +203,8 @@ void TickServer::RunProcess()
                 s = TickReadPacket(&rio);
                 if (s.ok()) {
                     std::queue<TickItem *> *q = &(tickThread_[last_thread_]->conn_queue_);
-                    TickItem *ti = new TickItem(rbuf_, rbuf_len_);
+                    BuildObuf();
+                    TickItem *ti = new TickItem(rbuf_, COMMAND_HEADER_LENGTH + COMMAND_CODE_LENGTH + rbuf_len_);
                     {
                     MutexLock l(&tickThread_[last_thread_]->mutex_);
                     q->push(ti);

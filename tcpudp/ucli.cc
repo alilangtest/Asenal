@@ -82,7 +82,7 @@ void send_pb(FILE *fp, int sockfd, const SA *pservaddr, socklen_t servlen)
     char w[100];
     BuildObuf(w, 1, sizeof(obuf));
     memcpy(w + 4 + 4, obuf, sizeof(obuf));
-    for (int i = 0; i < 1000000; i++) {
+    for (int i = 0; i < 10; i++) {
         sendto(sockfd, w, 4 + 4 + sizeof(obuf), 0, pservaddr, servlen);
     }
 

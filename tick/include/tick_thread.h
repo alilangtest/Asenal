@@ -39,7 +39,7 @@ private:
     /*
      * Send msg to qbus
      */
-    bool SendMessage(const char *msg);
+    bool SendMessage(const char *msg, int32_t len);
 
 
 

@@ -42,6 +42,7 @@ private:
     Status TickReadCode(rio_t *rio);
     Status TickReadPacket(rio_t *rio);
 
+    Status BuildObuf();
     /*
      * The udp server port and address
      */

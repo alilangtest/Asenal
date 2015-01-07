@@ -10,10 +10,12 @@ public:
     TickItem(const char* str, int len);
     ~TickItem();
     char* msg() { return msg_; }
+    int32_t len() { return len_; }
 
 private:
 
     char *msg_;
+    int32_t len_;
 
     /*
      * No copy && assigned allowed

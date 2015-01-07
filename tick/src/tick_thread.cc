@@ -52,9 +52,9 @@ TickThread::~TickThread()
     close(notify_receive_fd_);
 }
 
-bool TickThread::SendMessage(const char *msg)
+bool TickThread::SendMessage(const char *msg, int32_t len)
 {
-    std::vector<std::string> msgs(1, msg);
+    std::vector<std::string> msgs(1, std::string(msg, len));
     std::string errstr("");
     bool ret = producer_->send(msgs, qbus_topic_, errstr, KafkaConstDef::MESSAGE_RANDOM_SEND);
     return ret;
@@ -72,14 +72,14 @@ void TickThread::RunProcess()
         nfds = tickEpoll_->TickPoll();
         tfe = tickEpoll_->firedevent();
         for (int i = 0; i < nfds; i++) {
-            if (tfe->mask_ & EPOLLIN) {
+            if ((tfe + i)->mask_ & EPOLLIN) {
                 read(notify_receive_fd_, bb, 1);
                 {
                 MutexLock l(&mutex_);
                 ti = conn_queue_.front();
                 conn_queue_.pop();
                 }
-                SendMessage(ti->msg());
+                SendMessage(ti->msg(), ti->len());
                 /*
                  * After consume the item, you need delete it
                  */
