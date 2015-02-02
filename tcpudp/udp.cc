@@ -52,7 +52,7 @@ int main()
     int tot = 0;
     for (;;) {
         nfds = epoll_wait(kdfpd, events, 100, 10000);
-        // printf("nfds %d\n", nfds);
+        printf("nfds %d\n", nfds);
         for (int i = 0; i < nfds; i++) {
 
             int fd = events[i].data.fd;
