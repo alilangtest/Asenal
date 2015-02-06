@@ -55,8 +55,8 @@ A Library that make the write from synchronous to asynchronous.
     * Elog  
     A erlang log library nif, simple and fast. Develop this log nif beacause in the situation of lots of message, lager will block the message queue
     <https://github.com/Qihoo360/elog.git>
-    * Pika
-    A network programming framework. Just write it for fun
+    * Pika  
+    A nosql server wrap leveldb as storage engine and use multi thread model. Just write it for fun
     <https://github.com/baotiao/pika>
 
 * Read the source code of Memcached, lighttped, leveldb and summarize some articles in my blog.  
